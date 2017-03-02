@@ -6,8 +6,12 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 	<style type="text/css">
 		* { margin: 0;padding: 0;}
-		.calendar{width:100%;margin:10px 0px 20px 0px;color:#555;}
+		.calendar{width:100%;margin:10px 0px 20px 0px;color:#555;position: relative;}
 		.calendar h4 {border-bottom: 2px solid #5bd999;text-align: center;font-size: 22px;font-weight: 700;margin-top: 10px;margin-bottom:0px;padding: 10px 0;}
+		.calendar button {position: absolute;width: 24px;height: 24px;top: 15px;border: none;}
+		.calendar button:focus { border: none;outline: none; }
+		.calendar button.month-less {left: 20px;background: url(left-icon.png) no-repeat left -60px;}
+		.calendar button.month-add {right: 20px;background: url(right-icon.png) no-repeat left -60px;}
 		.calendar .sign_tab{width: 100%;border-collapse: collapse;border: 1px solid #e8e8e8;border-top: 0;table-layout: fixed;}
 		.calendar .sign_tab th{text-align: center;height: 2.25rem;font-weight: 700;}
 		.calendar .sign_tab td{border: 1px solid #e8e8e8;height: 2.25rem;text-align: center;font-size: 0.8rem;font-family: arial;}
@@ -19,110 +23,110 @@
 	<script type="text/javascript">
 		(function(doc,win){
 			var docEl = doc.documentElement,
-				resizeEvt = "orientationchange" in window ? "orientationchange" : "resize",
-				recalc = function(){
-					var clientWidth = docEl.clientWidth;
-					if(!clientWidth) return;
-					clientWidth = clientWidth > 640 ? 640 : clientWidth;
-					docEl.style.fontSize = 20 * (clientWidth / 320) + "px";
-				};
+			resizeEvt = "orientationchange" in window ? "orientationchange" : "resize",
+			recalc = function(){
+				var clientWidth = docEl.clientWidth;
+				if(!clientWidth) return;
+				clientWidth = clientWidth > 640 ? 640 : clientWidth;
+				docEl.style.fontSize = 20 * (clientWidth / 320) + "px";
+			};
 			if(!doc.addEventListener) return;
 			win.addEventListener(resizeEvt,recalc,false);
 			doc.addEventListener('DOMContentLoaded', recalc, false);
 		})(document,window);
 
 		Calendar = {
-		    _today : new Date(),
-		    _date : new Date().getDate(),
-		    _day : new Date().getDay(),
-		    _month : new Date().getMonth() + 1,
-		    _year : new Date().getFullYear(),
-		    setDate:function(){
-		        this._date = new Date(this._today).getDate();
-		    },
-		    setDay:function(){
-		        this._day = new Date(this._today).getDay();
-		    },
-		    setMonth:function(){
-		        this._month = new Date(this._today).getMonth() + 1;
-		    },
-		    setYear:function(){
-		        this._year = new Date(this._today).getFullYear();
-		    },
-		    init:function(curDate){
-		        this._today = new Date(curDate);
-		        this.setDate();
-		        this.setDay();
-		        this.setMonth();
-		        this.setYear();
-		    },
-		    isLeap : function() {
-		        var year = this._year;
-		        if (year % 4 == 0 && year % 100 > 0) {
-		            return true;
-		        }
-		        if (year % 400 == 0 && year % 3200 > 0) {
-		            return true;
-		        }
-		        return false;
-		    },
-		    getLen : function() {
-		        if (this._month == 2) {
-		            if (this.isLeap()) {
-		                return 29;
-		            }
-		            return 28;
-		        }
-		        if (this._month < 8) {
-		            if (this._month % 2 > 0) {
-		                return 31;
-		            }
-		            return 30;
-		        }
-		        if (this._month % 2 > 0) {
-		            return 30;
-		        }
-		        return 31;
-		    },
-		    getCalendar : function(events) {
-		        var len = this.getLen();
-		        var d = new Date(this._year, this._month - 1, 1);
-		        var dfw = d.getDay();
-		        var arr = new Array();
-		        var tem = 0;
-		        var str = "";
-		        for (var i = 0; i < 6; i++) {
-		            arr[i] = new Array();
-		            for (var j = 0; j < 7; j++) {
-		                tem++;
-		                if (tem - dfw > 0 && tem - dfw <= len) {
-		                    arr[i][j] = tem - dfw;
-		                } else {
-		                    arr[i][j] = "";
-		                }
-		            }
-		        }
+			_today : new Date(),
+			_date : new Date().getDate(),
+			_day : new Date().getDay(),
+			_month : new Date().getMonth() + 1,
+			_year : new Date().getFullYear(),
+			setDate:function(){
+				this._date = new Date(this._today).getDate();
+			},
+			setDay:function(){
+				this._day = new Date(this._today).getDay();
+			},
+			setMonth:function(){
+				this._month = new Date(this._today).getMonth() + 1;
+			},
+			setYear:function(){
+				this._year = new Date(this._today).getFullYear();
+			},
+			init:function(curDate){
+				this._today = new Date(curDate);
+				this.setDate();
+				this.setDay();
+				this.setMonth();
+				this.setYear();
+			},
+			isLeap : function() {
+				var year = this._year;
+				if (year % 4 == 0 && year % 100 > 0) {
+					return true;
+				}
+				if (year % 400 == 0 && year % 3200 > 0) {
+					return true;
+				}
+				return false;
+			},
+			getLen : function() {
+				if (this._month == 2) {
+					if (this.isLeap()) {
+						return 29;
+					}
+					return 28;
+				}
+				if (this._month < 8) {
+					if (this._month % 2 > 0) {
+						return 31;
+					}
+					return 30;
+				}
+				if (this._month % 2 > 0) {
+					return 30;
+				}
+				return 31;
+			},
+			getCalendar : function(events) {
+				var len = this.getLen();
+				var d = new Date(this._year, this._month - 1, 1);
+				var dfw = d.getDay();
+				var arr = new Array();
+				var tem = 0;
+				var str = "";
+				for (var i = 0; i < 6; i++) {
+					arr[i] = new Array();
+					for (var j = 0; j < 7; j++) {
+						tem++;
+						if (tem - dfw > 0 && tem - dfw <= len) {
+							arr[i][j] = tem - dfw;
+						} else {
+							arr[i][j] = "";
+						}
+					}
+				}
 
-		        str += '<h4>'+this._year + '年' + this._month + '月'+ this._date + '日</h4>';//标题
+		        str += '<button class="month-less"></button><h4>'+this._year + '年' + this._month + '月'+ this._date + '日</h4><button class="month-add"></button>';//标题
 		        str += '<table class="sign_tab" border="0px" cellpadding="0px" cellspacing="0px">';
 		        str += '<thread><tr><th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th></tr></thread>';
 		        str += '<tbody>';
 		        for (var k = 0; k < 6; k++) {
-		            if (k == 5 && arr[k][0] == "")
-		                continue;
-		            str += '<tr>';
-		            for (var m = 0; m < arr[k].length; m++) {
-		                if(events.contains(arr[k][m])){
-		                	str += '<td class="red_tbg">' + arr[k][m] + '<span class="ui-state-default">已签</span>' + '</td>';
-		                }else{
+		        	if (k == 5 && arr[k][0] == "")
+		        		continue;
+		        	str += '<tr>';
+		        	for (var m = 0; m < arr[k].length; m++) {
+		        		if(events.contains(arr[k][m])){
+		        			str += '<td class="red_tbg">' + arr[k][m] + '<span class="ui-state-default">已签</span>' + '</td>';
+		        		}else{
 		                    //判断是否是当日
 		                    if(arr[k][m] == this._date){
-		                        str += '<td class="cur_day">' + arr[k][m] + '</td>';
-		                        continue;
+		                    	str += '<td class="cur_day">' + arr[k][m] + '</td>';
+		                    	continue;
 		                    }
 		                    if(arr[k][m] == ""){
-		                        str += '<td class="over">' + arr[k][m] + '</td>';
-		                        continue;
+		                    	str += '<td class="over">' + arr[k][m] + '</td>';
+		                    	continue;
 		                    }
 		                    str += '<td>' + arr[k][m] + '</td>';
 		                }
@@ -134,33 +138,33 @@
 		        return str;
 		    },
 		    nextMonth : function() {
-		        if (this._month == 12) {
-		            this._year++;
-		            this._month = 0;
-		        }
-		        this._month++;
+		    	if (this._month == 12) {
+		    		this._year++;
+		    		this._month = 0;
+		    	}
+		    	this._month++;
 		    },
 		    nextYear : function() {
-		        this._year++;
+		    	this._year++;
 		    },
 		    previousMonth : function() {
-		        if (this._month == 1) {
-		            this._year--;
-		            this._month = 13;
-		        }
-		        this._month--;
+		    	if (this._month == 1) {
+		    		this._year--;
+		    		this._month = 13;
+		    	}
+		    	this._month--;
 		    },
 		    previousYear : function() {
-		        this._year--;
+		    	this._year--;
 		    }
 		};
 		Array.prototype.contains = function(element) {
-		    for (var i = 0; i < this.length; i++) {
-		        if (this[i] == element) {
-		            return true;
-		        }
-		    }
-		    return false;
+			for (var i = 0; i < this.length; i++) {
+				if (this[i] == element) {
+					return true;
+				}
+			}
+			return false;
 		};
 
 	</script>
