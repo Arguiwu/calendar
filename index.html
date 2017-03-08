@@ -20,6 +20,10 @@
 		.red_tbg .ui-state-default {font-size: 0.6em;width: 100%;text-align: center; position: absolute;top:1.4rem;left: 0;}
 		.calendar .sign_tab td.cur_day{background-color: #FFD2D2;color: #FFF;}
 	</style>
+</head>
+<body>
+	<div id="box" class="calendar"></div>
+	<script type="text/javascript" src="calendar.js"></script>
 	<script type="text/javascript">
 		(function(doc,win){
 			var docEl = doc.documentElement,
@@ -35,145 +39,8 @@
 			doc.addEventListener('DOMContentLoaded', recalc, false);
 		})(document,window);
 
-		Calendar = {
-			_today : new Date(),
-			_date : new Date().getDate(),
-			_day : new Date().getDay(),
-			_month : new Date().getMonth() + 1,
-			_year : new Date().getFullYear(),
-			setDate:function(){
-				this._date = new Date(this._today).getDate();
-			},
-			setDay:function(){
-				this._day = new Date(this._today).getDay();
-			},
-			setMonth:function(){
-				this._month = new Date(this._today).getMonth() + 1;
-			},
-			setYear:function(){
-				this._year = new Date(this._today).getFullYear();
-			},
-			init:function(curDate){
-				this._today = new Date(curDate);
-				this.setDate();
-				this.setDay();
-				this.setMonth();
-				this.setYear();
-			},
-			isLeap : function() {
-				var year = this._year;
-				if (year % 4 == 0 && year % 100 > 0) {
-					return true;
-				}
-				if (year % 400 == 0 && year % 3200 > 0) {
-					return true;
-				}
-				return false;
-			},
-			getLen : function() {
-				if (this._month == 2) {
-					if (this.isLeap()) {
-						return 29;
-					}
-					return 28;
-				}
-				if (this._month < 8) {
-					if (this._month % 2 > 0) {
-						return 31;
-					}
-					return 30;
-				}
-				if (this._month % 2 > 0) {
-					return 30;
-				}
-				return 31;
-			},
-			getCalendar : function(events) {
-				var len = this.getLen();
-				var d = new Date(this._year, this._month - 1, 1);
-				var dfw = d.getDay();
-				var arr = new Array();
-				var tem = 0;
-				var str = "";
-				for (var i = 0; i < 6; i++) {
-					arr[i] = new Array();
-					for (var j = 0; j < 7; j++) {
-						tem++;
-						if (tem - dfw > 0 && tem - dfw <= len) {
-							arr[i][j] = tem - dfw;
-						} else {
-							arr[i][j] = "";
-						}
-					}
-				}
-
-		        str += '<button class="month-less"></button><h4>'+this._year + '年' + this._month + '月'+ this._date + '日</h4><button class="month-add"></button>';//标题
-		        str += '<table class="sign_tab" border="0px" cellpadding="0px" cellspacing="0px">';
-		        str += '<thread><tr><th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th></tr></thread>';
-		        str += '<tbody>';
-		        for (var k = 0; k < 6; k++) {
-		        	if (k == 5 && arr[k][0] == "")
-		        		continue;
-		        	str += '<tr>';
-		        	for (var m = 0; m < arr[k].length; m++) {
-		        		if(events.contains(arr[k][m])){
-		        			str += '<td class="red_tbg">' + arr[k][m] + '<span class="ui-state-default">已签</span>' + '</td>';
-		        		}else{
-		                    //判断是否是当日
-		                    if(arr[k][m] == this._date){
-		                    	str += '<td class="cur_day">' + arr[k][m] + '</td>';
-		                    	continue;
-		                    }
-		                    if(arr[k][m] == ""){
-		                    	str += '<td class="over">' + arr[k][m] + '</td>';
-		                    	continue;
-		                    }
-		                    str += '<td>' + arr[k][m] + '</td>';
-		                }
-		            }
-		            str += '</tr>';
-		        }
-		        str += '</tbody>';
-		        str += '</table>';
-		        return str;
-		    },
-		    nextMonth : function() {
-		    	if (this._month == 12) {
-		    		this._year++;
-		    		this._month = 0;
-		    	}
-		    	this._month++;
-		    },
-		    nextYear : function() {
-		    	this._year++;
-		    },
-		    previousMonth : function() {
-		    	if (this._month == 1) {
-		    		this._year--;
-		    		this._month = 13;
-		    	}
-		    	this._month--;
-		    },
-		    previousYear : function() {
-		    	this._year--;
-		    }
-		};
-		Array.prototype.contains = function(element) {
-			for (var i = 0; i < this.length; i++) {
-				if (this[i] == element) {
-					return true;
-				}
-			}
-			return false;
-		};
-
-	</script>
-</head>
-<body>
-	<div id="box" class="calendar"></div>
-	<script type="text/javascript">
-		Calendar.init("2017-03-29");
-		document.getElementById('box').innerHTML = Calendar.getCalendar([1,2,3,4,8,11,28]);
+		var Calendar = new Calendar('box', { curDate: new Date()});
+		Calendar.init([1,3,5]);
 	</script>
 </body>
 </html>
