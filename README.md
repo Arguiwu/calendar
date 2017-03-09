@@ -5,11 +5,17 @@
 
  ### 使用
  ```
-   Calendar.init("2017-03-29"); 	(设置当前日期)
+   var Calendar = new Calendar('box', {		// box 容器ID
+   	curDate: new Date(),					// 当前日期
+   	getNextMonthArr: function() {			// 下一月签到时间
+   		return [1,2,6,8]
+   	},
+   	getPrevMonthArr: function() {			// 上一月签到时间
+   		return [1,5,9,11,25]
+   	}
+   });
+   Calendar.init([1,3,5]);					// 当月签到时间
 
-   var data = [1,2,3,4,8,11,28]; 	(当月已签到的日期)
-
-   //将渲染好的DOM插入指定元素
-   document.getElementById('box').innerHTML = Calendar.getCalendar();
+   Calendar.getCalendarTime()  				// 获取当前年月日
 
  ```

@@ -2,6 +2,7 @@
 
 	var Calendar = function(id, options) {
 		this.main = document.getElementById(id);
+		this.options = options;
 
 		this.today = new Date(options.curDate);
 		this.year = this.today.getFullYear();
@@ -15,13 +16,15 @@
 		me.main.innerHTML = me.getCalendar(dayArr);
 
 		me.main.querySelector('#nextMonth').addEventListener('click', function(e) {
-			me.nextMonth([1,5,6,19,22]);
+			me.nextMonth(me.options.getNextMonthArr());
 		});
 		me.main.querySelector('#prevMonth').addEventListener('click', function(e) {
-			me.prevMonth([1,5,6,19,22]);
+			me.prevMonth(me.options.getPrevMonthArr());
 		});
 	};
-
+	Calendar.prototype.getCalendarTime = function() {
+		return this.year + '-' + this.month + '-' + this.day;
+	};
 	//判断是否是闰年
 	Calendar.prototype.isLeap = function() {
 		var year = this.year;
