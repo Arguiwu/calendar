@@ -23,7 +23,7 @@
 		});
 	};
 	Calendar.prototype.getCalendarTime = function() {
-		return this.year + '-' + this.month + '-' + this.day;
+		return this.year + '-' + this.month + '-' + this.date;
 	};
 	//判断是否是闰年
 	Calendar.prototype.isLeap = function() {
