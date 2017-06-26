@@ -1,5 +1,12 @@
 # 带签到功能的移动端日历
-### 示例
+
+## vue目录下为 vue2.X 版本的 签到日历 可以根据自己需要自行修改
+
+### vue版示例
+   [![demo](https://github.com/Arguiwu/calendar/blob/master/img/vue-demo.png)]()
+
+
+### 原生js版示例
 
  [![demo](https://github.com/Arguiwu/calendar/blob/master/img/demo.png)]()
 
